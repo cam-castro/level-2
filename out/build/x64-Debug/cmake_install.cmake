@@ -1,8 +1,8 @@
-# Install script for directory: C:/Users/castr/OneDrive/Documentos/Cami/ITBA/1er cuatri 2024/EDA 2024/tp2/2. Lequel - Starter Code
+# Install script for directory: C:/Users/castr/source/repos/level-2
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Users/castr/OneDrive/Documentos/Cami/ITBA/1er cuatri 2024/EDA 2024/tp2/2. Lequel - Starter Code/out/install/x64-Debug")
+  set(CMAKE_INSTALL_PREFIX "C:/Users/castr/Source/Repos/level-2/out/install/x64-Debug")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/Users/castr/OneDrive/Documentos/Cami/ITBA/1er cuatri 2024/EDA 2024/tp2/2. Lequel - Starter Code/out/build/x64-Debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/Users/castr/source/repos/level-2/out/build/x64-Debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
