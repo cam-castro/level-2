@@ -64,9 +64,21 @@ void normalizeTrigramProfile(TrigramProfile &trigramProfile)
  */
 float getCosineSimilarity(TrigramProfile &textProfile, TrigramProfile &languageProfile)
 {
-    // Your code goes here...
+    float multiplication = 0, addition = 0;
 
-    return 0; // Fill-in result here
+    for( auto textKey : textProfile)
+    {
+        for (auto languageKey : languageProfile) 
+        {
+            if (textKey.first == languageKey.first) 
+            {
+                multiplication = textKey.second * languageKey.second;
+                addition += multiplication;
+            }
+        }
+    }
+
+    return addition;
 }
 
 /**
@@ -78,7 +90,27 @@ float getCosineSimilarity(TrigramProfile &textProfile, TrigramProfile &languageP
  */
 string identifyLanguage(const Text &text, LanguageProfiles &languages)
 {
-    // Your code goes here...
+    TrigramProfile unknownLanguageTriagram = buildTrigramProfile(text);
 
-    return ""; // Fill-in result here
+    normalizeTrigramProfile(unknownLanguageTriagram);
+
+    std::string unknownLanguageName;
+
+    float cosineSimilarity, maxSimilarity = 0;
+
+    for (auto language : languages) 
+    {
+        cosineSimilarity = getCosineSimilarity(unknownLanguageTriagram, language.trigramProfile);
+        if(maxSimilarity == cosineSimilarity)
+        {
+            unknownLanguageName = "There is more than one similarity";
+        }
+        else if (maxSimilarity < cosineSimilarity) 
+        {
+            maxSimilarity = cosineSimilarity;
+            unknownLanguageName = language.languageCode;
+        } 
+    }
+
+    return unknownLanguageName; // Fill-in result here
 }
