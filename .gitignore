@@ -3,4 +3,4 @@ build/
 .vs/
 CMakeFiles/
 CMakeCache.txt
-out/
+out/build/x64-Debug
