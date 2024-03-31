@@ -14,6 +14,7 @@
 #include <map>
 #include <string>
 
+
 #include "Text.h"
 
 // TrigramProfile: map of trigram -> frequency
@@ -22,8 +23,7 @@ typedef std::map<std::string, float> TrigramProfile;
 // TrigramList: list of trigrams
 typedef std::list<std::string> TrigramList;
 
-struct LanguageProfile
-{
+struct LanguageProfile{
     std::string languageCode;
     TrigramProfile trigramProfile;
 };

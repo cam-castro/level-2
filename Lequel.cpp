@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2022-2023
  *
  * @cite https://towardsdatascience.com/understanding-cosine-similarity-and-its-application-fd42f585296a
- */
+*/
 
 #include <cmath>
 #include <codecvt>
@@ -21,17 +21,51 @@ using namespace std;
  *
  * @param text Vector of lines (Text)
  * @return TrigramProfile The trigram profile
- */
-TrigramProfile buildTrigramProfile(const Text &text)
-{
-    wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+*/
 
-    // Your code goes here...
-    for (auto line : text)
-    {
-        if ((line.length() > 0) &&
-            (line[line.length() - 1] == '\r'))
+TrigramProfile buildTrigramProfile(const Text &text){
+
+    wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+    TrigramProfile textProfile;
+    wstring unicodeTrigram;
+    std::string Trigram;  
+
+    for(auto line : text){
+        if((line.length() > 0) && (line[line.length() - 1] == '\r')){
             line = line.substr(0, line.length() - 1);
+        }
+    }   
+
+    for(auto sentence : text){
+        wstring unicodeSentence = converter.from_bytes(sentence);
+        unicodeTrigram.clear();
+        Trigram.clear(); 
+
+        for(auto character : unicodeSentence){
+            if(unicodeTrigram.length() < 3){
+                unicodeTrigram += character;
+                if(unicodeTrigram.length() == 3){
+                    Trigram = converter.to_bytes(unicodeTrigram);
+                    textProfile.insert(std::make_pair(Trigram, 1)); 
+                }
+            }
+            else if(unicodeTrigram.length() == 3){
+                unicodeTrigram.erase(0, 1);
+                unicodeTrigram.push_back(character);
+
+                Trigram = converter.to_bytes(unicodeTrigram);
+
+                if(textProfile.count(Trigram) == 0){
+                    textProfile.insert(std::make_pair(Trigram, 1));                        
+                }
+                else{
+                    textProfile[Trigram]++;
+                }
+            }            
+            else{
+                cout<<"Oh shit"<< endl;
+            }
+        }
     }
 
     // Tip: converts UTF-8 string to wstring
@@ -40,18 +74,32 @@ TrigramProfile buildTrigramProfile(const Text &text)
     // Tip: convert wstring to UTF-8 string
     // string trigram = converter.to_bytes(unicodeTrigram);
 
-    return TrigramProfile(); // Fill-in result here
+    return textProfile; // Fill-in result here
 }
 
 /**
  * @brief Normalizes a trigram profile.
  *
  * @param trigramProfile The trigram profile.
- */
-void normalizeTrigramProfile(TrigramProfile &trigramProfile)
-{
-    // Your code goes here...
+*/
 
+void normalizeTrigramProfile(TrigramProfile &trigramProfile){
+    for(auto &pair : trigramProfile){
+        cout<<pair.first<<" "<<pair.second<<endl;
+    }
+
+    long double norm = 0;
+
+    for(auto &pair : trigramProfile){
+        norm += pair.second*pair.second;
+    }
+    norm = sqrt(norm);
+
+    for(auto &pair : trigramProfile){
+        pair.second = pair.second/norm;
+    }
+
+    
     return;
 }
 
@@ -61,23 +109,19 @@ void normalizeTrigramProfile(TrigramProfile &trigramProfile)
  * @param textProfile The text trigram profile
  * @param languageProfile The language trigram profile
  * @return float The cosine similarity score
- */
-float getCosineSimilarity(TrigramProfile &textProfile, TrigramProfile &languageProfile)
-{
+*/
+
+float getCosineSimilarity(TrigramProfile &textProfile, TrigramProfile &languageProfile){
     float multiplication = 0, addition = 0;
 
-    for( auto textKey : textProfile)
-    {
-        for (auto languageKey : languageProfile) 
-        {
-            if (textKey.first == languageKey.first) 
-            {
+    for(auto textKey : textProfile){
+        for(auto languageKey : languageProfile){
+            if(textKey.first == languageKey.first){
                 multiplication = textKey.second * languageKey.second;
                 addition += multiplication;
             }
         }
     }
-
     return addition;
 }
 
@@ -87,9 +131,9 @@ float getCosineSimilarity(TrigramProfile &textProfile, TrigramProfile &languageP
  * @param text A Text (vector of lines)
  * @param languages A list of Language objects
  * @return string The language code of the most likely language
- */
-string identifyLanguage(const Text &text, LanguageProfiles &languages)
-{
+*/
+
+string identifyLanguage(const Text &text, LanguageProfiles &languages){
     TrigramProfile unknownLanguageTriagram = buildTrigramProfile(text);
 
     normalizeTrigramProfile(unknownLanguageTriagram);
@@ -98,15 +142,12 @@ string identifyLanguage(const Text &text, LanguageProfiles &languages)
 
     float cosineSimilarity, maxSimilarity = 0;
 
-    for (auto language : languages) 
-    {
+    for(auto language : languages){
         cosineSimilarity = getCosineSimilarity(unknownLanguageTriagram, language.trigramProfile);
-        if(maxSimilarity == cosineSimilarity)
-        {
+        if(maxSimilarity == cosineSimilarity){
             unknownLanguageName = "There is more than one similarity";
         }
-        else if (maxSimilarity < cosineSimilarity) 
-        {
+        else if(maxSimilarity < cosineSimilarity) {
             maxSimilarity = cosineSimilarity;
             unknownLanguageName = language.languageCode;
         } 
