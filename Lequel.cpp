@@ -55,7 +55,7 @@ TrigramProfile buildTrigramProfile(const Text &text){
 
                 Trigram = converter.to_bytes(unicodeTrigram);
 
-                if(textProfile.count(Trigram) == 0){
+                if(textProfile.find(Trigram) != textProfile.end()){
                     textProfile.insert(std::make_pair(Trigram, 1));                        
                 }
                 else{
@@ -98,7 +98,6 @@ void normalizeTrigramProfile(TrigramProfile &trigramProfile){
     for(auto &pair : trigramProfile){
         pair.second = pair.second/norm;
     }
-
     
     return;
 }
@@ -112,15 +111,12 @@ void normalizeTrigramProfile(TrigramProfile &trigramProfile){
 */
 
 float getCosineSimilarity(TrigramProfile &textProfile, TrigramProfile &languageProfile){
-    float multiplication = 0, addition = 0;
+    float addition = 0;
 
     for(auto textKey : textProfile){
-        for(auto languageKey : languageProfile){
-            if(textKey.first == languageKey.first){
-                multiplication = textKey.second * languageKey.second;
-                addition += multiplication;
-            }
-        }
+        if(languageProfile.find(textKey.first) != languageProfile.end()){
+            addition += textKey.second * languageProfile[textKey.first];
+        }    
     }
     return addition;
 }
