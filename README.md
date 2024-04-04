@@ -102,6 +102,9 @@ Nosotros consideramos que analizar 50 lineas de texto es suficiente, ya que asi 
 
 ## **2. Nuevos idiomas:**
 
+
+
+
 Conseguimos que el programa compare nuevos idiomas creando lo que básicamente se podría coniderar un nuevo programa. Para alternar entre este y Lequel se debe modificar el "add_excecutable" en el CMake, cambiando main.cpp por AddLenguage.cpp y visceversa. Reutilizando elementos del main original, creamos un nuevo display que permite el ingreso de un nuevo corpus, que es convertido en variable tipo Text. Esta última se crea vector a vector de a dos elementos (El Key y la frecuencia de cada trigrama), que es utilizada para crear el ".csv". El mismo se crea en la carpeta de proyecto y debe ser movido manualmente a la carpeta de trigramas en resources. 
 
 Al terminar la creacion del ".csv" el programa espera 5 segundos y luego finaliza. Se debe alterar previo al proceso el archivo languagecode_name_es.csv (para que se cree el perfil del nuevo idioma), y el path que utiliza la función writeCSV para que no se cree un ".csv" que ya existe. Agregamos 4 idiomas (Guaraní, Catalán, Asturiano y klingon) y creamos una nueva carpeta en resources llamada AddedCorpuses que contiene el corpus que usamos para cada idioma.   
