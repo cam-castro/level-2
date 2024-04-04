@@ -2,11 +2,11 @@
 
 ## Integrantes del grupo y contribución al trabajo de cada integrante
 
-* [Camila Agustina Castro]: realizó funciones getCosineSimilarity e identifyLanguage
+* **Camila Agustina Castro**: realizó funciones getCosineSimilarity e identifyLanguage
 
-* [Santiago Pedro Garate]: relizó las funciones buildTrigramProfile y normalizeTrigramProfile
+* **Santiago Pedro Garate**: relizó las funciones buildTrigramProfile y normalizeTrigramProfile
 
-* La realizacion de los bonus y la optimización y revisión del código fueron llevados a cabo por ambos integrantes del grupo
+* La realizacion de los bonus y la optimización y revisión del código fueron llevados a cabo por **ambos integrantes** del grupo
 
 ## Respuestas del enunciado
 
@@ -91,10 +91,10 @@ WE WERE ALL GOING DIRECT TO HEAVEN, WE WERE ALL GOING DIRECT THE OTHER WAY
 
 ## Bonus points
 
-1. Cuellos de botella:
+**1. Cuellos de botella:**
     Durante nuestro trabajo, encontramos dos principales cuellos de botella cuando el código trabaja con textos de gran tamaño, el primero ocurre en el momento de crear el perfil de trigrama del texto. Debido a que el mismo recorre el texto no solo linea por linea, sino que tambien caractér a caractér, por lo que es lógico que un texto de muy gran tamaño presentrá un mayor tiempo de calculo computacional. El segundo cuello de botella que encontramos se produce al comparar el perfil de trigrama del texto con el de cada idioma, ya que por cada trigrama en el perfil del texto, se debe recorrer uno por uno todo el perfil de cada idioma. Si bien esta carga computacional fue mitigada usando funciones asociadas a los mapas que usamos para crear los perfiles de trigrama, el problema en ambos casos tiene se basa en la sobreabundancia de información que aportan textos de gran tamaño. La solucion que encontramos fue reducir la porcion de texto sobre la que trabaja el código, agregando un contador extra al for que itera sobre las lineas del texto. Por lo tanto, pudimos consiguir instaurar dos condiciones de salida: que el texto termine o que se alcance el numero especificado de líneas. Consideramos que esta es una solución apropiada, asumiendo que el texto este en su mayoría escrito en un único idioma, ya que al trabajar con la frecuencia de cada trigrama, los trigramas más comunes poseeran el mismo peso porcentual sin importar el largo del texto (obviamente considerando textos de largos rasonables). Es decir que, al asumir linealidad para representar a los trigramas, porque los mismos se usan como los componentes de un vector, es valido decir que si un trigrama aparece 4 veces entre 60 caractéres, el mismo aparecerá 40 veces entre 600, causando que el vector normalizado sea simepre el mismo (o con diferencia despreciable).
     
     Nosotros consideramos que analizar 50 lineas de texto es suficiente, ya que asi la presencia de lineas cortas no remueve demasiada información del texto y en todos los casos se obtiene una buena cantidad de trigramas. También tuvimos en cuenta la opción de limitar la cantidad de trigramas del perfil de texto que se comparan con los perfiles de los idiomas, pero descartamos esta idea ya que no se garantizaria que se tomarán en cuenta los trigramas que más se repiten y que por lo tanto poseen mayor peso en la determinación del idioma.
 
-2. Nuevos idiomas:
+**2. Nuevos idiomas:**
     Conseguimos que el programa compare nuevos idiomas creando lo que básicamente se podría coniderar un nuevo programa. Para alternar entre este y Lequel se debe modificar el "add_excecutable" en el CMake, cambiando main.cpp por AddLenguage.cpp y visceversa. Reutilizando elementos del main original, creamos un nuevo display que permite el ingreso de un nuevo corpus, que es convertido en variable tipo Text. Esta última se crea vector a vector de a dos elementos (El Key y la frecuencia de cada trigrama), que es utilizada para crear el ".csv". El mismo se crea en la carpeta de proyecto y debe ser movido manualmente a la carpeta de trigramas en resources. Tras finalizar la creacion del ".csv" el programa espera 5 segundos y luego finaliza. Se debe alterar previo al proceso el archivo languagecode_name_es.csv (para que se cree el perfil del nuevo idioma), y el path que utiliza la función writeCSV para que no se cree un ".csv" que ya existe. Agregamos 4 idiomas (Guaraní, Catalán, Asturiano y klingon) y creamos una nueva carpeta en resources llamada AddedCorpuses que contiene el corpus que usamos para cada idioma.   
