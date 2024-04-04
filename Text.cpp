@@ -17,7 +17,8 @@ using namespace std;
  * @param s String to convert
  * @param text Destination text
  * @return Function succeeded
- */
+*/
+
 bool getTextFromString(const string &s, Text &text)
 {
     text.clear();

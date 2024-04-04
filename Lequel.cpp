@@ -28,16 +28,18 @@ TrigramProfile buildTrigramProfile(const Text &text){
     wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
     TrigramProfile textProfile;
     wstring unicodeTrigram;
-    std::string Trigram;  
+    std::string Trigram;
+    int contador = 0; 
 
     for(auto line : text){
         if((line.length() > 0) && (line[line.length() - 1] == '\r')){
             line = line.substr(0, line.length() - 1);
         }
     }   
+    
+    for(auto sentence = text.begin(); (contador <= 50) && (sentence != text.end()); sentence++, contador++){
 
-    for(auto sentence : text){
-        wstring unicodeSentence = converter.from_bytes(sentence);
+        wstring unicodeSentence = converter.from_bytes(*sentence);
         unicodeTrigram.clear();
         Trigram.clear(); 
 
@@ -55,24 +57,15 @@ TrigramProfile buildTrigramProfile(const Text &text){
 
                 Trigram = converter.to_bytes(unicodeTrigram);
 
-                if(textProfile.find(Trigram) != textProfile.end()){
+                if(textProfile.find(Trigram) == textProfile.end()){
                     textProfile.insert(std::make_pair(Trigram, 1));                        
                 }
                 else{
                     textProfile[Trigram]++;
                 }
             }            
-            else{
-                cout<<"Oh shit"<< endl;
-            }
         }
     }
-
-    // Tip: converts UTF-8 string to wstring
-    // wstring unicodeString = converter.from_bytes(textLine);
-
-    // Tip: convert wstring to UTF-8 string
-    // string trigram = converter.to_bytes(unicodeTrigram);
 
     return textProfile; // Fill-in result here
 }
@@ -84,10 +77,6 @@ TrigramProfile buildTrigramProfile(const Text &text){
 */
 
 void normalizeTrigramProfile(TrigramProfile &trigramProfile){
-    for(auto &pair : trigramProfile){
-        cout<<pair.first<<" "<<pair.second<<endl;
-    }
-
     long double norm = 0;
 
     for(auto &pair : trigramProfile){
@@ -98,8 +87,6 @@ void normalizeTrigramProfile(TrigramProfile &trigramProfile){
     for(auto &pair : trigramProfile){
         pair.second = pair.second/norm;
     }
-    
-    return;
 }
 
 /**
